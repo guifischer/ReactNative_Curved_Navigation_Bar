@@ -3,6 +3,7 @@ import { Text, StyleSheet, View,Dimensions,Platform,TouchableHighlight } from 'r
 import {Animated,TouchableOpacity} from "react-native";
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import LinearGradient from "react-native-linear-gradient";
 
 const {height,width} = Dimensions.get('window');
 
@@ -15,14 +16,15 @@ let selected= 1;
 
 let yoffset=-30;
 // let primColor= '#4687FD';
-let iconSize=25
+let selectedIconSize=20
+let iconSize=20
 // let selectedIconColor='white'
 // let iconColor='black'
 
 
 let mainOffSet=Platform.OS==='ios'?20:0;
 
-let slider = [(2*1-1)*((1*(width/5))/2)+85,(2*5-1)*((1*(width/5))/2)+86]
+let slider = [(2*1-1)*((1*(width/5))/2)+85,(2*5-1)*((1*(width/5))/2)+84]
 
 export default class CurvedNavBar extends Component{
 
@@ -50,7 +52,7 @@ state={
       selectedIconColor:this.props.selectedIconColor?this.props.selectedIconColor:'white',
     })
 
-    this._start(this.props.selected?this.props.selected:1) //select the tab else 1
+    this._start(this.props.selected?this.props.selected:3) //select the tab else 1
 
   }
 
@@ -84,6 +86,8 @@ state={
 
   _start = (id) => {
 
+    this.props.cb(id)
+
     let idd='id'+id
     let hh = 'h'+id
     let iddd='i'+id
@@ -97,10 +101,10 @@ state={
     let d=this.state[h]
 
     // this.setState({[idd]: new Animated.Value()})
-    Animated.timing(a, {toValue: 0,duration: 100}).start()
-    Animated.timing(b, {toValue: 100,duration: 100}).start()
-    Animated.timing(c, {toValue: 1, duration: 200}).start() //icon circle upp 
-    Animated.timing(d , {toValue: 5, duration: 300}).start() //icon circle upp 
+    Animated.timing(a, {toValue: 0,duration: 100,useNativeDriver: false}).start()
+    Animated.timing(b, {toValue: 100,duration: 100,useNativeDriver: false}).start()
+    Animated.timing(c, {toValue: 1, duration: 200,useNativeDriver: false}).start() //icon circle upp
+    Animated.timing(d , {toValue: 5, duration: 300,useNativeDriver: false}).start() //icon circle upp
 
     this.showall(id)
 }
@@ -116,14 +120,14 @@ state={
         let a= this.state[idd]
         let b= this.state[hh]
         let c=this.state[iddd]
-        Animated.timing(a, {toValue: 1,duration: 200}).start() // icon fade
-        Animated.timing(b, {toValue: 0,duration: 200}).start() //icon lower
-        Animated.timing(c, {toValue: 0,duration: 200}).start() //icon lower rest
-        Animated.timing(d, {toValue: 10,duration: 200}).start() //icon lower rest
-        Animated.timing(this.animatedValue, {toValue: id,duration: 200}).start() //navbar
+        Animated.timing(a, {toValue: 1,duration: 200,useNativeDriver: false}).start() // icon fade
+        Animated.timing(b, {toValue: 0,duration: 200,useNativeDriver: false}).start() //icon lower
+        Animated.timing(c, {toValue: 0,duration: 200,useNativeDriver: false}).start() //icon lower rest
+        Animated.timing(d, {toValue: 10,duration: 200,useNativeDriver: false}).start() //icon lower rest
+        Animated.timing(this.animatedValue, {toValue: id,duration: 200,useNativeDriver: false}).start() //navbar
 
       }
-   
+
     }
   }
 
@@ -147,32 +151,35 @@ state={
 
 <View style={{position:'absolute',top:off}}>
 
-      <View style={{backgroundColor:this.state.primColor,position:'absolute',width:width,height:83,bottom:30+yoffset,
-      shadowColor: "#000",shadowOffset: {width: 1,height: 4},shadowOpacity: 0.5,shadowRadius: 10,}}></View> 
-      
+      <View style={{backgroundColor:this.state.primColor,position:'absolute',width:width,height:83,bottom:40+yoffset}}></View>
+
         <View style={{backgroundColor:'white',position:'absolute',
       bottom:-20+yoffset,
       width:width,
       height:100}}>
         </View>
 
-       
+
        <Animated.View style={{position:'absolute',bottom:0,left:navrr}}>
 
           <View style={{backgroundColor:this.state.primColor,position:'absolute',
-          bottom:65.5+yoffset
-          ,width:45,
-          right:61.8,
-          height:45,
-          borderRadius:40}}></View>
+          bottom:58+yoffset
+          ,width:65,
+          right:52.2,
+          height:65,
+          elevation:1,
+          transform: [
+            {scaleX: 1.2}
+          ],
+          borderRadius:999}}></View>
 
 
         <View style={{backgroundColor:'white',position:'absolute',
         bottom:0+yoffset,
-        right:100,
+        right:119.7,
         width:width,
-        height:100,
-        borderRadius:40
+        height:110,
+        borderRadius:45
         }}></View>
 
       {/* <View style={{backgroundColor:'white',position:'absolute',
@@ -186,39 +193,67 @@ state={
 
         <View style={{backgroundColor:'white',position:'absolute',
       bottom:0+yoffset,
-      right:Platform.OS==='ios'?-345:-343,
+      right:Platform.OS==='ios'?-364.7:-362.2,
       width:width,
-      height:100,
-        borderRadius:40
+      height:110,
+        borderRadius:45
         }}></View>
 
         </Animated.View>
 
-        
 
 
-<View style={{position:'absolute',bottom:0,width:width,height:100,flexDirection:'row',justifyContent:'space-around',paddingVertical:20}}>
-        
+
+<View style={{position:'absolute',bottom:0,width:width,height:100,flexDirection:'row',justifyContent:'space-around',paddingVertical:20,elevation:2}}>
+
         <TouchableOpacity onPressOut={() => this._start(1)}>
         <Animated.View style={{opacity:this.state.i1,top:this.state.hh1}} >
-        <Icon name={this.state.icon1} size={iconSize} color={this.state.selectedIconColor} />
+          <LinearGradient
+            useAngle={true}
+            angle={230}
+            angleCenter={{ x: 0.2, y: 0.2 }}
+            colors={['#48b7c3', '#badbbf']}
+            style={styles.selectedView}>
+            <Icon name={this.state.icon1} size={selectedIconSize} color={this.state.selectedIconColor} />
+          </LinearGradient>
         </Animated.View></TouchableOpacity>
 
 
         <TouchableOpacity onPressOut={() => this._start(2)}>
         <Animated.View style={{opacity:this.state.i2,top:this.state.hh2}} >
-        <Icon name={this.state.icon2} size={iconSize} color={this.state.selectedIconColor} />
+          <LinearGradient
+            useAngle={true}
+            angle={230}
+            angleCenter={{ x: 0.2, y: 0.2 }}
+            colors={['#48b7c3', '#badbbf']}
+            style={styles.selectedView}>
+            <Icon name={this.state.icon2} size={selectedIconSize} color={this.state.selectedIconColor} />
+          </LinearGradient>
         </Animated.View></TouchableOpacity>
 
         <TouchableOpacity onPressOut={() => this._start(3)}>
         <Animated.View style={{opacity:this.state.i3,top:this.state.hh3}} >
-        <Icon name={this.state.icon3} size={iconSize} color={this.state.selectedIconColor} />
-</Animated.View>
-</TouchableOpacity>
+          <LinearGradient
+            useAngle={true}
+            angle={230}
+            angleCenter={{ x: 0.2, y: 0.2 }}
+            colors={['#48b7c3', '#badbbf']}
+            style={styles.selectedView}>
+            <Icon name={this.state.icon3} size={selectedIconSize} color={this.state.selectedIconColor} />
+          </LinearGradient>
+        </Animated.View>
+        </TouchableOpacity>
 
         <TouchableOpacity onPressOut={() => this._start(4)}>
         <Animated.View style={{opacity:this.state.i4,top:this.state.hh4}} >
-        <Icon name={this.state.icon4} size={iconSize} color={this.state.selectedIconColor} />
+          <LinearGradient
+            useAngle={true}
+            angle={230}
+            angleCenter={{ x: 0.2, y: 0.2 }}
+            colors={['#48b7c3', '#badbbf']}
+            style={styles.selectedView}>
+            <Icon name={this.state.icon4} size={selectedIconSize} color={this.state.selectedIconColor} />
+          </LinearGradient>
         </Animated.View>
         </TouchableOpacity>
 
@@ -226,7 +261,14 @@ state={
 
         <TouchableOpacity onPressOut={() => this._start(5)} >
         <Animated.View style={{opacity:this.state.i5,top:this.state.hh5}} >
-        <Icon name={this.state.icon5} size={iconSize} color={this.state.selectedIconColor} />
+          <LinearGradient
+            useAngle={true}
+            angle={230}
+            angleCenter={{ x: 0.2, y: 0.2 }}
+            colors={['#48b7c3', '#badbbf']}
+            style={styles.selectedView}>
+            <Icon name={this.state.icon5} size={selectedIconSize} color={this.state.selectedIconColor} />
+          </LinearGradient>
         </Animated.View>
         </TouchableOpacity>
 
@@ -235,27 +277,27 @@ state={
 
 
 <View style={{position:'absolute',bottom:-20,width:width,height:100,flexDirection:'row',justifyContent:'space-around',paddingVertical:20}}>
-        
+
         <TouchableOpacity onPressOut={() => this._start(1)} style={{...styles.wicon}}>
         <Animated.View style={{opacity:this.state.id1,top:this.state.h1}} >
-        <Icon name={this.state.icon1} size={30} color={this.state.iconColor} />
+        <Icon name={this.state.icon1} size={iconSize} color={this.state.iconColor} />
         </Animated.View></TouchableOpacity>
 
 
         <TouchableOpacity onPressOut={() => this._start(2)} style={{...styles.wicon}}>
         <Animated.View style={{opacity:this.state.id2,top:this.state.h2}} >
-        <Icon name={this.state.icon2} size={30} color={this.state.iconColor} />
+        <Icon name={this.state.icon2} size={iconSize} color={this.state.iconColor} />
         </Animated.View></TouchableOpacity>
 
         <TouchableOpacity onPressOut={() => this._start(3)} style={{...styles.wicon}}>
         <Animated.View style={{opacity:this.state.id3,top:this.state.h3}} >
-        <Icon name={this.state.icon3} size={30} color={this.state.iconColor} />
+        <Icon name={this.state.icon3} size={iconSize} color={this.state.iconColor} />
           </Animated.View>
     </TouchableOpacity>
 
         <TouchableOpacity onPressOut={() => this._start(4)} style={{...styles.wicon}}>
         <Animated.View style={{opacity:this.state.id4,top:this.state.h4}} >
-        <Icon name={this.state.icon4} size={30} color={this.state.iconColor} />
+        <Icon name={this.state.icon4} size={iconSize} color={this.state.iconColor} />
         </Animated.View>
         </TouchableOpacity>
 
@@ -263,7 +305,7 @@ state={
 
         <TouchableOpacity onPressOut={() => this._start(5)} style={{...styles.wicon}}>
         <Animated.View style={{opacity:this.state.id5?this.state.id5:1,top:this.state.h5}} >
-        <Icon name={this.state.icon5} size={30} color={this.state.iconColor} />
+        <Icon name={this.state.icon5} size={iconSize} color={this.state.iconColor} />
         </Animated.View>
         </TouchableOpacity>
 
@@ -292,5 +334,14 @@ const styles = StyleSheet.create({
     width:width/6,
     paddingTop:10,
     top:-10
+  },
+  selectedView: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 10,
+    width:45,
+    height:45,
+    borderRadius:999
   }
 })
